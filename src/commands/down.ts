@@ -5,10 +5,15 @@ import * as shelljs from "shelljs";
 import { testTargetDirectory, displayCommandHeader } from "../actions";
 
 export default class Down extends Command {
-  static description = "describe the command here";
+  static description = "Stops the local development environment";
 
   static flags = {
-    verbose: flags.boolean({ char: "v", default: false })
+    verbose: flags.boolean({ char: "v", default: false }),
+    destroy: flags.boolean({
+      char: "d",
+      description: "Destroy the mounted volumes",
+      default: false
+    })
   };
 
   static args = [
@@ -32,7 +37,11 @@ export default class Down extends Command {
     }
 
     shelljs.cd(directory);
-    shelljs.exec("docker-compose down", { silent: !flags.verbose });
+    if (flags.destroy) {
+      shelljs.exec("docker-compose down -v", { silent: !flags.verbose });
+    } else {
+      shelljs.exec("docker-compose down", { silent: !flags.verbose });
+    }
 
     console.log(chalk.green("Your app is stopped"));
   }

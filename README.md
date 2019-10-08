@@ -36,13 +36,17 @@ USAGE
 
 <!-- commands -->
 
-- [`lvl artisan COMMAND`](#lvl-artisan-command)
-- [`lvl composer COMMAND`](#lvl-composer-command)
-- [`lvl configure`](#lvl-configure)
-- [`lvl help [COMMAND]`](#lvl-help-command)
-- [`lvl new`](#lvl-new)
-- [`lvl up [DIRECTORY]`](#lvl-up-directory)
-- [`lvl down [DIRECTORY]`](#lvl-down-directory)
+- [Laravel Up ⬆️](#laravel-up-%e2%ac%86%ef%b8%8f)
+  - [A Delightful Developer Environment and CLI for the Laravel Framework](#a-delightful-developer-environment-and-cli-for-the-laravel-framework)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`lvl artisan COMMAND`](#lvl-artisan-command)
+  - [`lvl composer COMMAND`](#lvl-composer-command)
+  - [`lvl configure`](#lvl-configure)
+  - [`lvl help [COMMAND]`](#lvl-help-command)
+  - [`lvl new`](#lvl-new)
+  - [`lvl up [DIRECTORY]`](#lvl-up-directory)
+  - [`lvl down [DIRECTORY]`](#lvl-down-directory)
 
 ## `lvl artisan COMMAND`
 
@@ -155,6 +159,7 @@ ARGUMENTS
 
 OPTIONS
   -v, --verbose
+  -d, --destroy
 ```
 
 _See code: [src/commands/down.ts](https://github.com/badassery/laravel-up/blob/v0.0.8/src/commands/down.ts)_
