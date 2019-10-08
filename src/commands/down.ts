@@ -6,7 +6,7 @@ import { testTargetDirectory, displayCommandHeader } from "../actions";
 import * as inquirer from "inquirer";
 
 export default class Down extends Command {
-  static description = "describe the command here";
+  static description = "Stops a running Laravel Up project";
 
   static flags = {
     verbose: flags.boolean({
@@ -41,9 +41,8 @@ export default class Down extends Command {
       return false;
     }
 
-    let assuredDestroy = false;
     if (flags.destroy) {
-      assuredDestroy = (await inquirer.prompt([
+      const assuredDestroy = (await inquirer.prompt([
         {
           message: chalk.yellow(
             "Are you sure you would like remove dev environment volumes?"
@@ -52,26 +51,25 @@ export default class Down extends Command {
           type: "confirm"
         }
       ])).confirm;
-      console.log();
+
+      if (!assuredDestroy) {
+        return;
+      }
     }
 
     shelljs.cd(directory);
     shelljs.exec(
-      ["docker-compose", "down", assuredDestroy ? "-v" : ""].join(" "),
+      ["docker-compose", "down", flags.destroy ? "-v" : ""].join(" "),
       { silent: !flags.verbose }
     );
 
-    const extendedMessage = assuredDestroy
-      ? ` & ${chalk.bgRedBright(
-          chalk.black(" ✘ removed ")
-        )} dev environment volumes`
-      : ` ${chalk.bgGreen(
-          chalk.black(" without ")
-        )} removing dev environment volumes`;
+    const extendedMessage = ` & ${chalk.bgRedBright(
+      chalk.black(" ✘ removed ")
+    )} dev environment volumes`;
 
     console.log(
       chalk.green(
-        `Your dev environment is stopped${
+        `\nYour dev environment is stopped${
           flags.destroy ? extendedMessage : ""
         }.`
       )
