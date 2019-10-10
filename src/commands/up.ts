@@ -8,6 +8,8 @@ import {
 } from "../actions";
 import Listr from "listr";
 import * as ip from "ip";
+import Composer from "./composer";
+import { execAsync } from "../providers/execAsync";
 
 export default class Up extends Command {
   static description = "Spins Up your local dev environment";
@@ -41,25 +43,34 @@ export default class Up extends Command {
     const xdebugIp = ip.address();
 
     const tasks = new Listr([
-      // {
-      //   title: "Checking Composer install",
-      //   task: noop,
-      //   skip: () => "Packages are already installed"
-      // },
       {
         title: `Setting XDebug Remote Host to ${xdebugIp}`,
-        task: () => configureXdebug(directory, xdebugIp)
+        task: async (ctx, task) => {
+          await configureXdebug(directory, xdebugIp);
+          task.title = `Setup XDebug Remote Host to ${xdebugIp}`;
+        }
       },
       {
         title: "Starting Docker Services",
-        task: async () => {
-          const output = await shelljs
-            .exec("docker-compose up -d", { silent: !flags.verbose })
-            .stderr.toString();
+        task: async (ctx, task) => {
+          const { stderr } = await execAsync("docker-compose up -d", {
+            silent: !flags.verbose
+          });
+
+          const output = stderr.toString();
+          task.title = "Setup Docker Services";
 
           if (output.includes("ERROR")) {
             throw new Error("Failed to start Docker Services");
           }
+        }
+      },
+      {
+        title: "Composer",
+        task: async (ctx, task) => {
+          task.output = "Installing";
+          await Composer.run(["install", "-s"]);
+          task.title = "Composer Packages ready";
         }
       }
       // {

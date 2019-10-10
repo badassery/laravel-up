@@ -1,5 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import * as shelljs from "shelljs";
+import { execAsync } from "../providers/execAsync";
 
 export default class Composer extends Command {
   static description = "Executes a composer command";
@@ -37,7 +38,9 @@ export default class Composer extends Command {
       commandText = commandText = `${commandText} --help`;
     }
 
-    shelljs.exec(commandText, {
+    // waiting for complete standard output of shalljs.exec
+
+    await execAsync(commandText, {
       silent: flags.silent && !flags["command-help"]
     });
   }
