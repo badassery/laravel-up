@@ -6,7 +6,7 @@ import * as shelljs from "shelljs";
 import {
   configureXdebug,
   displayCommandHeader,
-  testTargetDirectory
+  tryChangeDirectory
 } from "../actions";
 import { VERBOSE_DESCRIPTION } from "../constants";
 import TargetDirectoryCommand from "./target-directory-command";
@@ -33,7 +33,7 @@ export default class Up extends TargetDirectoryCommand {
       ? this.targetDirectory
       : this.currentDirectory;
 
-    if (!testTargetDirectory(directory)) {
+    if (!tryChangeDirectory(directory)) {
       return false;
     }
 

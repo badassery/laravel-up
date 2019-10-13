@@ -6,16 +6,18 @@ import chalk from "chalk";
 export const readFileAsync = promisify(fs.readFile);
 export const writeFileAsync = promisify(fs.writeFile);
 
-export const testTargetDirectory = (candidateDir: string) => {
-  const hasDirError = shelljs.cd(candidateDir).stderr;
-
-  if (hasDirError) {
+export const tryChangeDirectory = (candidateDir: string) => {
+  if (
+    !fs.existsSync(candidateDir) ||
+    !fs.lstatSync(candidateDir).isDirectory()
+  ) {
     console.log(
-      chalk.red(`${location} is not a valid target project directory`)
+      chalk.red(`\n${candidateDir} is not a valid project directory`)
     );
-
     return false;
   }
+
+  shelljs.cd(candidateDir);
 
   return true;
 };
