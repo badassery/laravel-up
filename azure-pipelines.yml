@@ -8,12 +8,12 @@ trigger:
 # - master
 # - "azure-pipelines"
 
-# pool:
+pool:
 #   vmImage: 'ubuntu-latest'
-  # name: local
+  name: local
 
 steps:
-- script: echo why
+- script: echo please
   displayName: 'Run a one-line script'
 
 - script: |
